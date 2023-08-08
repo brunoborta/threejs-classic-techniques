@@ -137,6 +137,7 @@ const parameters = {
   randomnessPower: 3,
   insideColor: "#ff6030",
   outsideColor: "#1b3984",
+  rotation: 0.01,
 };
 
 gui
@@ -151,7 +152,7 @@ gui
   .min(0.001)
   .max(0.1)
   .step(0.01)
-  .name("Size of the Stars")
+  .name("Stars Size")
   .onFinishChange(() => generateGalaxy(parameters));
 
 gui
@@ -159,7 +160,7 @@ gui
   .min(0.01)
   .max(20)
   .step(0.01)
-  .name("Radius of the Galaxy")
+  .name("Galaxy Radius")
   .onFinishChange(() => generateGalaxy(parameters));
 
 gui
@@ -175,7 +176,7 @@ gui
   .min(-5)
   .max(5)
   .step(0.001)
-  .name("Curve Spin")
+  .name("Branch Curve")
   .onFinishChange(() => generateGalaxy(parameters));
 
 gui
@@ -201,6 +202,14 @@ gui
 gui
   .addColor(parameters, "outsideColor")
   .name("Outside Color")
+  .onFinishChange(() => generateGalaxy(parameters));
+
+gui
+  .add(parameters, "rotation")
+  .min(0.01)
+  .max(1)
+  .step(0.001)
+  .name("Galaxy Rotation")
   .onFinishChange(() => generateGalaxy(parameters));
 
 generateGalaxy(parameters);
@@ -263,6 +272,9 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+
+  // Rotate galaxy
+  points.rotation.y = elapsedTime * parameters.rotation;
 
   // Update controls
   controls.update();
